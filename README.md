@@ -16,6 +16,10 @@ A senior engineer (or coding agent) with only this source and `README.md` can:
 3. Install the skill into consumer repos
 4. Verify the package is complete via `scripts/verify.sh`
 
+**[Support Public Goods](https://donate.stripe.com/test_28E8wP60D9pC9hf1flbAs00)**
+
+*Test-mode link.*
+
 ## The loop
 
 | Stage | Output |
