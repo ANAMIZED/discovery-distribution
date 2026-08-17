@@ -38,12 +38,24 @@ A senior engineer (or coding agent) with only this source and `README.md` can:
 | **5. Elite package** | LICENSE, SECURITY, CI, CoC, CONTRIBUTING, badges, structure |
 | **6. Distribute** | Public GitHub repo + skill + **registries / awesome-lists** |
 
+## Agent discovery contract
+
+Short rules for agents packaging or listing ANAMIZED (and consumer) products:
+
+| Topic | Rule |
+|-------|------|
+| **`AGENTS.md` (required)** | State: (1) what the project is, (2) how to run & verify, (3) hard boundaries / fail-closed rules, (4) surfaces that must stay working. Update it when public surfaces change. |
+| **Registries — hit in this order** | **1.** Official MCP Registry — root `server.json` + `mcp-publisher publish` · **2.** Glama — `glama.json` + repo submit · **3.** mcp.so — web form · **4.** Awesome-lists — one high-quality PR per list |
+| **`🤖🤖🤖`** | Use **only** when the *target list* documents it (today: [punkpeye/awesome-mcp-servers](https://github.com/punkpeye/awesome-mcp-servers) CONTRIBUTING). Append to the **PR title** for agent fast-track. Not a global ranking signal — never spray it on unrelated READMEs or random PRs. |
+| **Operator docs** | [DISTRIBUTION.md](DISTRIBUTION.md) · [docs/MCP_PUBLISHER_CHECKLIST.md](docs/MCP_PUBLISHER_CHECKLIST.md) · [docs/AWESOME_LIST_PRS.md](docs/AWESOME_LIST_PRS.md) |
+
 ## Distribution (Stage 6)
 
 | Doc | Purpose |
 |-----|--------|
 | **[DISTRIBUTION.md](DISTRIBUTION.md)** | Full checklist: MCP Registry, Glama, mcp.so, GitHub signals |
-| **[docs/AWESOME_LIST_PRS.md](docs/AWESOME_LIST_PRS.md)** | Ready-to-paste PR blurbs for awesome-mcp-servers lists |
+| **[docs/MCP_PUBLISHER_CHECKLIST.md](docs/MCP_PUBLISHER_CHECKLIST.md)** | One-shot `mcp-publisher` per repo |
+| **[docs/AWESOME_LIST_PRS.md](docs/AWESOME_LIST_PRS.md)** | Ready-to-paste PR blurbs + punkpeye fork status |
 
 ## Quick start
 
@@ -60,7 +72,7 @@ bash scripts/verify.sh
 | Skill | `skills/discovery-distribution/SKILL.md` |
 | Playbook | `PLAYBOOK.md` |
 | Distribution | `DISTRIBUTION.md` |
-| Agent contract | `AGENTS.md` |
+| Agent contract | `AGENTS.md` + this section |
 | Templates | `templates/` |
 | Verify contract | `scripts/verify.sh` |
 
