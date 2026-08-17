@@ -15,6 +15,7 @@ A senior engineer (or coding agent) with only this source and `README.md` can:
 2. Run the process on a new domain
 3. Install the skill into consumer repos
 4. Verify the package is complete via `scripts/verify.sh`
+5. Execute organic distribution across MCP registries and awesome-lists
 
 **[Support Public Goods](https://donate.stripe.com/00w5kE3wOg5L8Jn2F243S00)**
 
@@ -35,7 +36,14 @@ A senior engineer (or coding agent) with only this source and `README.md` can:
 | **3. Build** | Kernel + surfaces (API, CLI, SDK, MCP, skills, AGENTS.md) as applicable |
 | **4. Verify** | Single script / gate that proves every surface works |
 | **5. Elite package** | LICENSE, SECURITY, CI, CoC, CONTRIBUTING, badges, structure |
-| **6. Distribute** | Public GitHub repo + skill installed into consumer trees |
+| **6. Distribute** | Public GitHub repo + skill + **registries / awesome-lists** |
+
+## Distribution (Stage 6)
+
+| Doc | Purpose |
+|-----|--------|
+| **[DISTRIBUTION.md](DISTRIBUTION.md)** | Full checklist: MCP Registry, Glama, mcp.so, GitHub signals |
+| **[docs/AWESOME_LIST_PRS.md](docs/AWESOME_LIST_PRS.md)** | Ready-to-paste PR blurbs for awesome-mcp-servers lists |
 
 ## Quick start
 
@@ -51,6 +59,7 @@ bash scripts/verify.sh
 |---------|------|
 | Skill | `skills/discovery-distribution/SKILL.md` |
 | Playbook | `PLAYBOOK.md` |
+| Distribution | `DISTRIBUTION.md` |
 | Agent contract | `AGENTS.md` |
 | Templates | `templates/` |
 | Verify contract | `scripts/verify.sh` |
