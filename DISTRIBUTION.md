@@ -14,20 +14,24 @@ Uses the same surfaces the discovery-distribution skill defines: AGENTS.md, SKIL
 | `README.md` | Human + agent entry; demos above the fold |
 | `scripts/verify.sh` | Stranger-runnable acceptance gate |
 
-**Status (2026-08-17):**
+**Status (2026-08-23):**
 
-| Repo | AGENTS.md | server.json | glama.json |
-|------|-----------|-------------|------------|
-| OpenGOS | ✅ | ✅ | ✅ |
-| needrail | ✅ | ✅ | ✅ |
-| server-os | ✅ | ✅ | ✅ |
-| openmesha | ✅ | ✅ | ✅ |
-| LRSI | ✅ | ✅ | ✅ |
-| x402-cloudflare-starter | ✅ | ✅ | ✅ |
-| agenticarb | ✅ | — (not MCP-primary) | — |
-| edge-os | ✅ | optional | optional |
-| rui | ✅ | optional | optional |
-| discovery-distribution | ✅ | n/a | n/a |
+| Repo | AGENTS.md | server.json | glama.json | Official registry |
+|------|-----------|-------------|------------|-------------------|
+| YodMCP | ✅ | ✅ | ✅ | `io.github.ANAMIZED/yodmcp` active |
+| SuperAgenticMCP | ✅ | ✅ (official schema) | ✅ | `io.github.ANAMIZED/superagenticmcp` active |
+| OpenGOS | ✅ | ✅ | ✅ | `io.github.ANAMIZED/opengos` active |
+| needrail | ✅ | ✅ | ✅ | `io.github.ANAMIZED/needrail` active |
+| server-os | ✅ | ✅ | ✅ | `io.github.ANAMIZED/server-os` active |
+| openmesha | ✅ | ✅ | ✅ | `io.github.ANAMIZED/openmesha` active |
+| LRSI | ✅ | ✅ | ✅ | `io.github.ANAMIZED/lrsi` active |
+| x402-cloudflare-starter | ✅ | ✅ | ✅ | `io.github.ANAMIZED/x402-cloudflare-starter` active |
+| agenticarb | ✅ | — (not MCP-primary) | — | — |
+| edge-os | ✅ | optional | optional | — |
+| rui | ✅ | optional | optional | — |
+| discovery-distribution | ✅ | n/a | n/a | n/a |
+
+See `docs/REGISTRY_STATUS.md` for Glama / mcp.so / awesome-list leftovers.
 
 ## 2. MCP / agent registries (submit these)
 
