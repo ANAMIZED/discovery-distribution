@@ -13,93 +13,106 @@ Uses the same surfaces the discovery-distribution skill defines: AGENTS.md, SKIL
 | `glama.json` | Glama MCP registry indexing |
 | `README.md` | Human + agent entry; demos above the fold |
 | `scripts/verify.sh` | Stranger-runnable acceptance gate |
+| `.github/workflows/publish-mcp.yml` | OIDC publish to official MCP Registry on every `v*` release |
 
-**Status (2026-08-23):**
+**Status (2026-08-26):**
 
-| Repo | AGENTS.md | server.json | glama.json | Official registry |
-|------|-----------|-------------|------------|-------------------|
-| YodMCP | ✅ | ✅ | ✅ | `io.github.ANAMIZED/yodmcp` active |
-| SuperAgenticMCP | ✅ | ✅ (official schema) | ✅ | `io.github.ANAMIZED/superagenticmcp` active |
-| OpenGOS | ✅ | ✅ | ✅ | `io.github.ANAMIZED/opengos` active |
-| needrail | ✅ | ✅ | ✅ | `io.github.ANAMIZED/needrail` active |
-| server-os | ✅ | ✅ | ✅ | `io.github.ANAMIZED/server-os` active |
-| openmesha | ✅ | ✅ | ✅ | `io.github.ANAMIZED/openmesha` active |
-| LRSI | ✅ | ✅ | ✅ | `io.github.ANAMIZED/lrsi` active |
-| x402-cloudflare-starter | ✅ | ✅ | ✅ | `io.github.ANAMIZED/x402-cloudflare-starter` active |
-| agenticarb | ✅ | — (not MCP-primary) | — | — |
-| edge-os | ✅ | optional | optional | — |
-| rui | ✅ | optional | optional | — |
-| discovery-distribution | ✅ | n/a | n/a | n/a |
+| Repo | AGENTS.md | server.json | publish-mcp.yml | Official registry |
+|------|-----------|-------------|-----------------|-------------------|
+| YodMCP | ✅ | ✅ | ✅ release + OIDC | `io.github.ANAMIZED/yodmcp` |
+| SuperAgenticMCP | ✅ | ✅ | ✅ release + OIDC | `io.github.ANAMIZED/superagenticmcp` |
+| OpenGOS | ✅ | ✅ | ✅ release + OIDC | `io.github.ANAMIZED/opengos` |
+| NeedRail | ✅ | ✅ | ✅ release + OIDC | `io.github.ANAMIZED/needrail` |
+| Server-OS | ✅ | ✅ | ✅ release + OIDC | `io.github.ANAMIZED/server-os` |
+| OpenMesha | ✅ | ✅ | ✅ release + OIDC | `io.github.ANAMIZED/openmesha` |
+| LRSI | ✅ | ✅ | ✅ release + OIDC | `io.github.ANAMIZED/lrsi` |
+| x402-cloudflare-starter | ✅ | ✅ | ✅ release + OIDC | `io.github.ANAMIZED/x402-cloudflare-starter` |
 
 See `docs/REGISTRY_STATUS.md` for Glama / mcp.so / awesome-list leftovers.
 
-## 2. MCP / agent registries (submit these)
+## 2. Official MCP Registry (the distribution spine)
 
-| Registry | How | Priority targets |
-|----------|-----|------------------|
-| **Official MCP Registry** | `mcp-publisher login github` → `mcp-publisher publish` (needs `server.json`) | OpenGOS, needrail, server-os, openmesha, LRSI, x402-cloudflare-starter |
-| **Glama** | Submit GitHub repo at [glama.ai](https://glama.ai) (indexes `glama.json`) | Same MCP set |
-| **mcp.so** | Web form + GitHub login | OpenGOS, needrail, x402-cloudflare-starter |
-| **Smithery** | Publisher account (HTTP MCP preferred) | When hosted HTTP endpoints exist |
+There is one official catalog: `https://registry.modelcontextprotocol.io`.
+PulseMCP and other sub-registries ingest it. Glama / Smithery / mcp.so still need a claim.
 
-### Official registry publish (operator steps)
+### Automatic path (preferred)
+
+1. Keep `server.json` valid (`name` = `io.github.ANAMIZED/<repo-slug>`).
+2. If `packages[]` points at PyPI/npm, that package version must already be public.
+3. Cut a release:
 
 ```bash
-# Install publisher (example)
-brew install mcp-publisher   # or download from modelcontextprotocol/registry releases
+git tag v0.2.0
+git push origin v0.2.0
+# or GitHub → Releases → Publish release
+```
 
-cd /path/to/OpenGOS   # or needrail, server-os, ...
+4. `.github/workflows/publish-mcp.yml` then:
+   - authenticates with **GitHub OIDC** (`mcp-publisher login github-oidc`)
+   - stamps `server.json` `.version` from the tag
+   - stamps `packages[].version` only when it already matched the previous `.version`
+   - runs `mcp-publisher publish`
+
+No PAT. Permission required: `id-token: write`.
+Org membership for ANAMIZED must be **public** or OIDC namespace checks fail.
+
+Reusable workflow copy lives at:
+`.github/workflows/publish-mcp-registry.yml` in this repo.
+
+### Manual fallback
+
+```bash
 mcp-publisher login github
 mcp-publisher publish
 ```
 
-Namespace used: `io.github.ANAMIZED/<name>`.
+```bash
+curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.ANAMIZED"
+```
+
+### Other directories (not automatic)
+
+| Registry | How |
+|----------|-----|
+| **PulseMCP** | Ingests official registry (~daily / weekly) |
+| **Glama** | Claim the GitHub repo (`glama.json`) |
+| **mcp.so** | Web form + GitHub login |
+| **Smithery** | Separate publish; hosted HTTP `/mcp` preferred |
 
 ## 3. Awesome-lists (PR targets)
 
 | List | Category suggestion | Primary repos |
 |------|---------------------|---------------|
-| [punkpeye/awesome-mcp-servers](https://github.com/punkpeye/awesome-mcp-servers) | Finance / Public goods / Agents | OpenGOS, needrail |
-| [DhanushNehru/awesome-mcp-servers](https://github.com/DhanushNehru/awesome-mcp-servers) | Development & DevOps / AI Agents | server-os, LRSI, openmesha |
-| [Sagargupta16/awesome-mcp-servers](https://github.com/Sagargupta16/awesome-mcp-servers) | By category | OpenGOS, x402 |
+| [punkpeye/awesome-mcp-servers](https://github.com/punkpeye/awesome-mcp-servers) | Finance / Public goods / Agents | OpenGOS, NeedRail |
+| [DhanushNehru/awesome-mcp-servers](https://github.com/DhanushNehru/awesome-mcp-servers) | Development & DevOps / AI Agents | Server-OS, LRSI, OpenMesha |
 | x402 / crypto payment lists | Payments | x402-cloudflare-starter |
-| Public-goods / grants tooling lists | Funding | OpenGOS, needrail |
-
-### Suggested one-line blurbs for PRs
-
-- **OpenGOS** — MCP server for grants + public-goods funding discovery, ranking, and grounded proposal outlines (open-source bias).
-- **NeedRail** — Agent-native Needs registry (MCP + x402) for public-goods coordination with mandatory provenance.
-- **server-os** — Fail-closed agentic OS: agents as processes with cost, governance, MCP, SDK, CLI.
-- **x402-cloudflare-starter** — Minimal USDC micropayments on Base + Solana via x402; BYO wallets; Cloudflare Workers.
+| Public-goods / grants tooling lists | Funding | OpenGOS, NeedRail |
 
 ## 4. Package indexes
 
 | Index | Targets |
 |-------|--------|
-| **PyPI** | `opengos` (live/planned), needrail, server-os, lrsi, openmesha when versioned |
-| **npm** | x402-cloudflare-starter (optional package publish) |
+| **PyPI** | opengos, needrail, server-os, yodmcp, lrsi, openmesha, superagenticmcp |
+| **npm** | only if the package in `server.json` is yours |
+
+Publish the package **before** tagging if `server.json` lists that package version. The official registry validates package existence.
 
 ## 5. GitHub-native signals
 
-Manual (Dashboard / UI — API limited):
+- Pin 4–6 flagship repos
+- Topics: `mcp`, `mcp-server`, `model-context-protocol`
+- Cross-link flagships in every README
 
-- Pin 4–6 flagship repos on profile
-- Topics per repo: `mcp`, `agentic-os`, `x402`, `public-goods`, `grants`, `fail-closed`, etc.
-- “Available for hire” on profile
-- Cross-link flagships in every README (already started)
+## 6. Order of operations
 
-## 6. Order of operations (recommended)
-
-1. Keep AGENTS.md + server.json + glama.json green on MCP repos ✅
-2. Publish OpenGOS + needrail to official MCP Registry + Glama (highest signal)
-3. Open 2–3 awesome-list PRs with the blurbs above
-4. PyPI release for OpenGOS if not already published
-5. Repeat for server-os / LRSI / openmesha / x402
+1. `server.json` + `publish-mcp.yml` green ✅
+2. Tag `v*` so OIDC publish runs
+3. Confirm official registry API
+4. Claim Glama if the listing is unverified
+5. Awesome-list PRs only after Glama/official exist
 
 ## 7. What this process does *not* do
 
-- Paid ads
-- Guaranteed featured placement
-- Star farming or engagement manipulation
-
-Organic only: correct metadata → registries → agents → humans.
+- List you on Smithery / mcp.so / awesome-lists automatically
+- Host binaries (registry is metadata only)
+- Paid ads or guaranteed featured placement
