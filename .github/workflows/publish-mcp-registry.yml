@@ -1,0 +1,60 @@
+name: Publish MCP Registry
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: "Override server.json version (no v prefix)"
+        type: string
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Official MCP Registry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve version
+        id: ver
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          V="$INPUT_VERSION"
+          if [ -z "$V" ] && [ "${{ github.event_name }}" = "release" ]; then
+            V="${{ github.event.release.tag_name }}"
+          fi
+          if [ -z "$V" ] && [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            V="${GITHUB_REF_NAME}"
+          fi
+          V="${V#v}"
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+
+      - name: Stamp server.json version
+        if: steps.ver.outputs.version != ''
+        run: |
+          V="${{ steps.ver.outputs.version }}"
+          jq --arg v "$V" '
+            . as $root
+            | .version = $v
+            | if (.packages | type) == "array" then
+                .packages |= map(if .version == $root.version then .version = $v else . end)
+              else . end
+          ' server.json > server.json.tmp && mv server.json.tmp server.json
+          echo "Stamped $V"
+          cat server.json
+
+      - name: Install mcp-publisher
+        run: |
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
+
+      - name: Login with GitHub OIDC
+        run: ./mcp-publisher login github-oidc
+
+      - name: Publish
+        run: ./mcp-publisher publish
